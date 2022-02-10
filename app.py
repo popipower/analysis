@@ -81,23 +81,29 @@ def handler(event, context):
 
         if event.get('queryStringParameters'):
             if event['queryStringParameters'].get('interval'):
-                interval = event['queryStringParameters']['interval'].split(",")
+                interval = event['queryStringParameters']['interval']
 
         if event.get('queryStringParameters'):
             if event['queryStringParameters'].get('period'):
-                period = event['queryStringParameters']['period'].split(",")
+                period = event['queryStringParameters']['period']
 
         if event.get('queryStringParameters'):
             if event['queryStringParameters'].get('isOptionChain'):
-                isOptionChain = event['queryStringParameters']['isOptionChain'].split(",")
+                isOptionChain = event['queryStringParameters']['isOptionChain']
 
         if event.get('queryStringParameters'):
             if event['queryStringParameters'].get('expiryRange'):
-                expiryRange = event['queryStringParameters']['expiryRange'].split(",")
+                expiryRange = event['queryStringParameters']['expiryRange']
 
     for ticker in tickers:
         data.append(processTicker(df, ticker, interval, period, expiryRange, isOptionChain))
-    final_data = "{\"data\":" + json.dumps(data, cls=StockEncoder, indent=4) + "}"
+    #final_data = "{\"data\":" + json.dumps(data, cls=StockEncoder, indent=4) + "}"
+        final_data = {
+            "statusCode": 200,
+            "headers": {},
+            "body": json.dumps(data, cls=StockEncoder),
+            "isBase64Encoded": False
+        }
     print(final_data)
     return final_data
 
